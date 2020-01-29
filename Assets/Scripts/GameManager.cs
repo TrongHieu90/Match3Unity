@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 			}
 		}
 
-		//TODO: continue to finish this method
+		//TODO: continue to finish this method @35.52 minute mark on vid
 		return null;
 
 	}
