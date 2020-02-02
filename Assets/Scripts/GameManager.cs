@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 				if(val <= 0 ) continue;
 			}
 
-			//todo: continue the tutorial to finish this method
+			//todo: continue the tutorial to finish this method @ https://youtu.be/cqJ5b5aFo5U?t=3187
 		}
 	}
 
