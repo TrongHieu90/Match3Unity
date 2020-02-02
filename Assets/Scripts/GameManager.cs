@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
 				int val = GetValueAtPoint(p);
 				if(val <= 0 ) continue;
 			}
+
+			//todo: continue the tutorial to finish this method
 		}
 	}
 
@@ -80,8 +82,78 @@ public class GameManager : MonoBehaviour
 			}
 		}
 
-		//TODO: continue to finish this method @35.52 minute mark on vid
-		return null;
+		//check for middle point to see if the other two points have same shape
+		for (int i = 0; i < 2; i++)
+		{
+			List<Point> line = new List<Point>();
+			int same = 0;
+
+			Point[] check = {Point.Add(p, directions[i]) //i = 0 -> up dir for example
+							,Point.Add(p, directions[i + 2]) }; // i + 2 -> down dir for example
+
+			foreach (var item in check)
+			{
+				if (GetValueAtPoint(item) == val)
+				{
+					line.Add(item);
+					same++;
+				}
+			}
+
+			if (same > 1) //if there are more of the same shape in directions -> match
+			{
+				AddPoints(ref connected, line);
+			}
+		}
+
+		//check for 2x2
+		for (int i = 0; i < 4; i++)
+		{
+			List<Point> square = new List<Point>();
+
+			int same = 0;
+			int next = i + 1;
+			if (next >= 4)
+			{
+				next -= 4;
+			}
+
+			Point[] check = 
+			{
+				Point.Add(p, directions[i]),
+				Point.Add(p, directions[next]),
+				Point.Add(p, Point.Add(directions[i], directions[next]))
+			};
+
+			foreach (var item in check)
+			{
+				if (GetValueAtPoint(item) == val)
+				{
+					square.Add(item);
+					same++;
+				}
+			}
+
+			if (same > 2) //if there are more of the same shape in directions -> match
+			{
+				AddPoints(ref connected, square);
+			}
+		}
+
+		if (main) //check for other matches along the current match with 1 time recursive
+		{
+			for (int i = 0; i < connected.Count; i++)
+			{
+				AddPoints(ref connected, IsConnected(connected[i], false));	
+			}
+		}
+
+		if (connected.Count > 0)
+		{
+			connected.Add(p);
+		}
+
+		return connected;
 
 	}
 
@@ -92,17 +164,32 @@ public class GameManager : MonoBehaviour
 			Point[] directions =
 			{
 				Point.Up,
+				Point.Right,
 				Point.Down,
-				Point.Left,
-				Point.Right
+				Point.Left
 			};
 			return directions;
 		}
 	}
 
-	private void AddPoints(ref List<Point> connected, List<Point> line)
+	private void AddPoints(ref List<Point> connected, List<Point> add)
 	{
-		throw new NotImplementedException();
+		foreach (var item in add)
+		{
+			bool shouldAdd = true;
+
+			for (int i = 0; i < connected.Count; i++)
+			{
+				if (connected[i].Equal(item))
+				{
+					shouldAdd = false;
+					break;
+				}
+			}
+
+			if(shouldAdd)
+				connected.Add(item);
+		}
 	}
 
 	private int GetValueAtPoint(Point point)
