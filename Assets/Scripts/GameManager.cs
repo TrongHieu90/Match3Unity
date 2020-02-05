@@ -47,8 +47,16 @@ public class GameManager : MonoBehaviour
 				if(val <= 0) continue;
 
 				GameObject go = Instantiate(nodePiece, gameBoard);
+				var offsetWidth = gameBoard.rect.width / width;
+				var offsetHeight = gameBoard.rect.height / height;
+
+				var node = go.GetComponent<NodePiece>();
+				node.boardHeight = offsetWidth;
+				node.boardWidth = offsetHeight;
+				node.Init(val, new Point(x, y), Pieces[val -1]);
+
 				RectTransform rect = go.GetComponent<RectTransform>();
-				rect.anchoredPosition = new Vector2(0 + 900/width * x, 0 - 1600/height * y);
+				rect.anchoredPosition = new Vector2(0 + offsetWidth * x, 0 - offsetHeight * y);
 			}
 		}
 	}
