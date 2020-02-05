@@ -289,7 +289,7 @@ public class GameManager : MonoBehaviour
 }
 
 [System.Serializable]
-public class Node
+public struct Node
 {
 	//0 = blank,
 	//1 = cube,
