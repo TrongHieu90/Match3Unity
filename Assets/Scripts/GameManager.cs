@@ -90,7 +90,6 @@ public class GameManager : MonoBehaviour
 				remove = new List<int>();
 				while (IsConnected(p, true).Count > 0)
 				{
-					val = GetValueAtPoint(p);
 					if (!remove.Contains(val))
 					{
 						remove.Add(val);
