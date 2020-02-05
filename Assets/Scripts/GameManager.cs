@@ -8,12 +8,23 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviour
 {
 	public ArrayLayout BoardLayout;
-	public Sprite[] Pieces;
 	private Node[,] _board;
+
+	[Header("UI Elements")] 
+	public RectTransform gameBoard;
+	public Sprite[] Pieces;
+
+	[Header("Prefab")] 
+	public GameObject nodePiece;
+
 	private int width = 9;
 	private int height = 14;
 	private System.Random _random;
 
+	private void Start()
+	{
+		Init();
+	}
 
 	private void Init()
 	{
@@ -22,7 +33,24 @@ public class GameManager : MonoBehaviour
 		_random = new System.Random(seed.GetHashCode());
 
 		GenerateBoard();
+		VerifyBoard();
+		GeneratePieces();
+	}
 
+	private void GeneratePieces()
+	{
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				int val = _board[x, y].value;
+				if(val <= 0) continue;
+
+				GameObject go = Instantiate(nodePiece, gameBoard);
+				RectTransform rect = go.GetComponent<RectTransform>();
+				rect.anchoredPosition = new Vector2(0 + 900/width * x, 0 - 1600/height * y);
+			}
+		}
 	}
 
 	private void GenerateBoard()
@@ -42,6 +70,7 @@ public class GameManager : MonoBehaviour
 
 	private void VerifyBoard()
 	{
+		List<int> remove;
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
@@ -49,10 +78,42 @@ public class GameManager : MonoBehaviour
 				Point p = new Point(x, y);
 				int val = GetValueAtPoint(p);
 				if(val <= 0 ) continue;
-			}
 
-			//todo: continue the tutorial to finish this method @ https://youtu.be/cqJ5b5aFo5U?t=3187
+				remove = new List<int>();
+				while (IsConnected(p, true).Count > 0)
+				{
+					val = GetValueAtPoint(p);
+					if (!remove.Contains(val))
+					{
+						remove.Add(val);
+					}
+					SetValueAt(p, NewValue(ref remove));
+				}
+			}
 		}
+	}
+
+	private int NewValue(ref List<int> remove)
+	{
+		List<int>availables = new List<int>();
+
+		for (int i = 0; i < Pieces.Length; i++)
+		{
+			availables.Add(i + 1);
+		}
+
+		foreach (var item in remove)
+		{
+			availables.Remove(item);
+		}
+
+		if (availables.Count <= 0) return 0;
+		return availables[_random.Next(0, availables.Count)];
+	}
+
+	private void SetValueAt(Point p, int v)
+	{
+		_board[p.x, p.y].value = v;
 	}
 
 	List<Point> IsConnected(Point p, bool main)
@@ -194,6 +255,7 @@ public class GameManager : MonoBehaviour
 
 	private int GetValueAtPoint(Point point)
 	{
+		if (point.x < 0 || point.x >= width || point.y < 0 || point.y >= height) return -1;
 		return _board[point.x, point.y].value;
 	}
 

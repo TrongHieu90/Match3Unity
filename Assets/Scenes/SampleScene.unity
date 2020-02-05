@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -455,12 +455,14 @@ MonoBehaviour:
     - row: 000000000000000000
     - row: 000000000000000000
     - row: 000000000000000000
+  gameBoard: {fileID: 2070710815}
   Pieces:
   - {fileID: 7086606104257924489, guid: 34f6321b206afab459fb7c8d37989456, type: 3}
   - {fileID: -8166966530815011495, guid: 34f6321b206afab459fb7c8d37989456, type: 3}
   - {fileID: -488248382649040768, guid: 34f6321b206afab459fb7c8d37989456, type: 3}
   - {fileID: -7105913188517789750, guid: 34f6321b206afab459fb7c8d37989456, type: 3}
   - {fileID: 5528609633622603068, guid: 2c97df9695607b04c92ec362851a0890, type: 3}
+  nodePiece: {fileID: 0}
 --- !u!1 &1973696337
 GameObject:
   m_ObjectHideFlags: 0
